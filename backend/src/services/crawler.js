@@ -31,9 +31,19 @@ async function fetchPage(url, timeout = FETCH_TIMEOUT) {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; InterviewPrepBot/1.0)' },
       redirect: 'follow',
+      follow: 5, // cap redirect hops
     });
 
     clearTimeout(timer);
+
+    // Re-validate final URL after redirects to prevent redirect-based SSRF
+    // (attacker.com → 169.254.169.254 style bypasses)
+    if (res.url && res.url !== url) {
+      const finalCheck = validateExternalUrl(res.url);
+      if (!finalCheck.valid) {
+        return { url, success: false, reason: `Redirect target blocked: ${finalCheck.reason}` };
+      }
+    }
 
     const contentType = res.headers.get('content-type') || '';
     if (!contentType.includes('text/html') && !contentType.includes('text/plain')) {
@@ -92,8 +102,8 @@ function extractText(html) {
 async function checkRobotsTxt(baseUrl) {
   try {
     const robotsUrl = new URL('/robots.txt', baseUrl).href;
-    const res = await fetch(robotsUrl, { timeout: 5000 });
-    if (res.ok) return await res.text();
+    const result = await fetchPage(robotsUrl, 5000);
+    if (result.success && result.html) return result.html;
   } catch {}
   return '';
 }

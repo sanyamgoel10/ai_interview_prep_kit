@@ -1,12 +1,18 @@
 const PRIVATE_RANGES = [
-  /^127\./,
-  /^10\./,
-  /^192\.168\./,
-  /^172\.(1[6-9]|2\d|3[01])\./,
-  /^::1$/,
+  /^127\./,           // loopback
+  /^10\./,            // RFC1918
+  /^192\.168\./,      // RFC1918
+  /^172\.(1[6-9]|2\d|3[01])\./, // RFC1918
+  /^0\./,             // this-network
+  /^169\.254\./,      // link-local (AWS/GCP metadata lives here)
+  /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./, // CGNAT RFC6598
+  /^::1$/,            // IPv6 loopback
+  /^::ffff:/i,        // IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1)
+  /^fe80:/i,          // IPv6 link-local
+  /^fc[0-9a-f]/i,     // IPv6 unique-local fc00::/7
+  /^fd[0-9a-f]/i,     // IPv6 unique-local fd00::/8
   /^localhost$/i,
-  /^0\./,
-  /^169\.254\./,
+  /^metadata\.google\.internal$/i, // GCP metadata endpoint
 ];
 
 function isPrivateHost(hostname) {
