@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment variables - never commit secrets
+.env
+.env.local
+.env.production
+
+# Build outputs
+.next/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Claude Code internal
+.claude/
