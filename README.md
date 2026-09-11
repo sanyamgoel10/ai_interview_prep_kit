@@ -2,8 +2,6 @@
 
 A web application that turns a job description into a personalised interview preparation kit. Paste a job description, provide the company website, and say how many days you have — the app crawls the company site, searches public interview discussion, and generates a structured kit: company brief, role breakdown, categorised question bank, flashcards, and a day-by-day study schedule.
 
-**Assessment:** Trao Full-Stack Assessment — FS-AI-INTERVIEW-01
-
 **Live demo:** [Frontend](https://your-app.vercel.app) · [Backend](https://your-app.onrender.com)
 
 ---
